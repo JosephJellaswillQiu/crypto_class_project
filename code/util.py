@@ -144,13 +144,13 @@ class suggestion_generator:
         tier_1=[];tier_2=[];tier_3=[];tier_4=[]
         for letter, percent in freq_percent.items():
             if percent > 0.1:
-                tier_1.append(letter)
+                tier_1.append((letter,percent))
             elif percent > 0.05:
-                tier_2.append(letter)
+                tier_2.append((letter,percent))
             elif percent > 0.01:
-                tier_3.append(letter)
+                tier_3.append((letter,percent))
             else:
-                tier_4.append(letter)
+                tier_4.append((letter,percent))
         tier ={
             "tier_1": (tier_1,">10%"),
             "tier_2": (tier_2,">5%"),
@@ -175,11 +175,13 @@ def check_short_words_validity(cipher_text, key):
     count = 0
     result = []
     for i, word in enumerate(words_list):
+        word = word.strip('.,!?;:"()[]{}')
         if 1 <= len(word) <= 4:
             total += 1
             is_valid = word.lower() in english_words
             count += is_valid
-            result.append((word, is_valid))
+            if not is_valid:
+                result.append((word, i))
     return result, total, count
 
 def suggest_vowels(text,key):
@@ -232,8 +234,8 @@ def generate_assist_suggestions(text, key):
     return "haven't implemented yet"
 
     
-    
-    
+
+
     
     
 ## test the functionality
