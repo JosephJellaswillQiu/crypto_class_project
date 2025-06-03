@@ -1,3 +1,7 @@
+import nltk
+
+nltk.data.path.append('./my_nltk_data')
+
 class FrequencyAnalyzer:
     def __init__(self, text):
         self.text = text.lower()
@@ -126,6 +130,7 @@ class suggestion_generator:
             for char in word:
                 if char in vowels:
                     freq += 1
+                    break
         if freq != len(words):
             return f"元音单词百分比：{freq/len(words)*100:.2f}%"
         else:
@@ -147,16 +152,36 @@ class suggestion_generator:
             else:
                 tier_4.append(letter)
         tier ={
-            "tier_1": tier_1,
-            "tier_2": tier_2,
-            "tier_3": tier_3,
-            "tier_4": tier_4
+            "tier_1": (tier_1,">10%"),
+            "tier_2": (tier_2,">5%"),
+            "tier_3": (tier_3,">1%"),
+            "tier_4": (tier_4,"<1%")
         }
         return tier
     
-    
-    
-    
+
+from nltk.corpus import words
+# 提取英文单词词典并转换为小写集合，提高查询效率
+english_words = set(word.lower() for word in words.words())
+def check_short_words_validity(cipher_text, key):
+    """
+    检查密文中的短词（1-3字母）在解密后是否为有效英文单词
+    返回一个包含(原词, 解密词, 是否有效)的列表
+    """
+    decryptor_instance = decryptor(cipher_text, key)
+    decrypted_text = decryptor_instance.decrypt()
+    words_list = decrypted_text.split()
+    total = 0
+    count = 0
+    result = []
+    for i, word in enumerate(words_list):
+        if 1 <= len(word) <= 4:
+            total += 1
+            is_valid = word.lower() in english_words
+            count += is_valid
+            result.append((word, is_valid))
+    return result, total, count
+
 def suggest_vowels(text,key):
     generator = suggestion_generator()
     decryptor_instance = decryptor(text, key)
@@ -235,3 +260,5 @@ if __name__ == "__main__":
     print("Bigram Frequency:", bi_frequency)    
     print("Trigram Frequency:", tri_frequency)
     print("Trigram Word Frequency:", word)
+    nltk.data.path.append('./my_nltk_data')  # 添加路径到查找列表
+    nltk.download('words', download_dir='./my_nltk_data')  # 下载到指定位置

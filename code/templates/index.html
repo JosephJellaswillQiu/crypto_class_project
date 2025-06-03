@@ -15,6 +15,7 @@
       // 清空结果/错误显示区域
       if (!firstLoad) {
         resultDiv = document.querySelector(".result");
+        hintDiv = document.querySelector(".hint");
       const errorDiv = document.querySelector(".error");
       if (resultDiv) resultDiv.innerHTML = "";
       if (errorDiv) errorDiv.innerHTML = "";
@@ -51,7 +52,7 @@
         <label>明文：</label>
         <textarea name="text" rows="4" required>{{ request.form.text or "" }}</textarea>
 
-        <label>密钥（JSON 格式）：</label>
+        <label>密钥（JSON 格式）：如{"a":"e","e":"c"}</label>
         <textarea name="key" rows="4" required>{{ key_raw or "" }}</textarea>
 
         <button type="submit">加密</button>
@@ -65,7 +66,7 @@
         <label>密文：</label>
         <textarea name="text" rows="4" required>{{ request.form.text or "" }}</textarea>
 
-        <label>密钥（JSON 格式）：</label>
+        <label>密钥（JSON 格式）：如{"a":"e","e":"c"}</label>
         <textarea name="key" rows="4" required>{{ key_raw or "" }}</textarea>
 
         <button type="submit">解密</button>
@@ -80,7 +81,7 @@
           <label>文本：</label>
           <textarea name="text" rows="4" required>{{ request.form.text or "" }}</textarea>
       
-          <label>密钥（JSON 格式）：</label>
+          <label>密钥（JSON 格式）：如{"a":"e","e":"c"}</label>
           <textarea name="key" rows="4" required>{{ key_raw or "" }}</textarea>
       
           <div style="margin-top: 10px;">
@@ -101,7 +102,7 @@
           <label>文本：</label>
           <textarea name="text" rows="4" required>{{ request.form.text or "" }}</textarea>
       
-          <label>密钥（JSON 格式）：</label>
+          <label>密钥（JSON 格式）：如{"a":"e","e":"c"}</label>
           <textarea name="key" rows="4" required>{{ key_raw or "" }}</textarea>
       
           <div style="margin-top: 10px;">
@@ -109,6 +110,7 @@
             <button name="assist_type" value="vowel">元音检查</button>
             <button name="assist_type" value="word_level">词频分级</button>
             <button name="assist_type" value="compare">对比模式</button>
+            <button name="assist_type" value="word_check">短词检查</button>
           </div>
       
           
@@ -119,6 +121,8 @@
 
     {% if result %}
     <div class="result"><strong>结果：</strong><pre>{{ result }}</pre></div>
+    <div class="hint"><strong>提示：</strong>{{ hint }}</div>
+    {% else %}
     {% endif %}
 
     {% if error %}
