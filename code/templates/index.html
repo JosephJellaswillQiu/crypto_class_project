@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>单表代换辅助工具</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔐 单表代换辅助工具</h1>
+
+      <form method="POST">
+        <label>输入文本：</label>
+        <textarea name="text" rows="4" required>{{ request.form.text or "" }}</textarea>
+
+        <label>密钥（JSON 格式，例如 {"a":"d","b":"e",...}）：</label>
+        <textarea name="key" rows="4" required>{{ key_raw or "" }}</textarea>
+
+        <div class="button-group">
+          <button name="mode" value="encrypt">加密</button>
+          <button name="mode" value="decrypt">解密</button>
+        </div>
+      </form>
+
+      {% if result %}
+      <div class="result">
+        <strong>结果：</strong>
+        <p>{{ result }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
