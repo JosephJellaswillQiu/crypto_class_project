@@ -84,8 +84,10 @@ class decryptor:
         for char in self.text:
             if char in self.key:
                 decrypted_text += self.key[char]
+            elif char.isalpha():
+                decrypted_text += "_"
             else:
-                decrypted_text += " "
+                decrypted_text += char
         return decrypted_text
     
     def get_suggestions(self, key={}):
@@ -125,9 +127,47 @@ class suggestion_generator:
                 if char in vowels:
                     freq += 1
         if freq != len(words):
-            return freq / len(words)
+            return f"元音单词百分比：{freq/len(words)*100:.2f}%"
         else:
-            return 1
+            return "所有单词都包含元音字母"
+    
+    def seperate_letters(self, text):
+        analyzer = FrequencyAnalyzer(text)
+        single_freq = analyzer.single_letter_frequency()
+        total_letters = sum(single_freq.values())
+        freq_percent = {letter: (count / total_letters)  for letter, count in single_freq.items()}
+        tier_1=[];tier_2=[];tier_3=[];tier_4=[]
+        for letter, percent in freq_percent.items():
+            if percent > 0.1:
+                tier_1.append(letter)
+            elif percent > 0.05:
+                tier_2.append(letter)
+            elif percent > 0.01:
+                tier_3.append(letter)
+            else:
+                tier_4.append(letter)
+        tier ={
+            "tier_1": tier_1,
+            "tier_2": tier_2,
+            "tier_3": tier_3,
+            "tier_4": tier_4
+        }
+        return tier
+    
+    
+    
+    
+def suggest_vowels(text,key):
+    generator = suggestion_generator()
+    decryptor_instance = decryptor(text, key)
+    decrypted_text = decryptor_instance.decrypt()
+    return generator.check_vowels(decrypted_text)
+
+def suggest_by_word_frequency(text):
+    suggest = suggestion_generator()
+    return suggest.seperate_letters(text)
+        
+        
             
 def encrypt(text, key):
     encryptor_instance = encryptor(text, key)
@@ -140,6 +180,33 @@ def decrypt(text, key):
 def contrast_decrypt(text, key):
     decryptor_instance = decryptor(text, key)
     return decryptor_instance.contrast_decrypt()
+
+def letter_frequency(text):
+    analyzer = FrequencyAnalyzer(text)
+    freq = analyzer.single_letter_frequency()
+    total_letters = sum(freq.values())
+    freq_percent = {letter: (count / total_letters) for letter, count in freq.items()}
+    return freq_percent
+    
+def bigram_frequency(text):
+    analyzer = FrequencyAnalyzer(text)
+    bi_freq = analyzer.bigram_frequency()
+    return bi_freq
+
+def trigram_frequency(text):
+    analyzer = FrequencyAnalyzer(text)
+    tri_freq = analyzer.trigram_frequency()
+    return tri_freq
+
+def word_frequency(text):   
+    analyzer = FrequencyAnalyzer(text)
+    w_freq = analyzer.word_frequency()
+    return w_freq
+
+def generate_assist_suggestions(text, key):
+    return "haven't implemented yet"
+
+    
     
     
     
