@@ -66,11 +66,10 @@ def index():
                     hint = f"根据英语的统计，单词频率分级为{tiered_frequencies}，可以参考这些频率来进行单词的猜测。"
                 elif assist_type == "compare":
                     result = contrast_decrypt(text, key)
+                    hint = generate_assist_suggestions(text, key)
                 elif assist_type == "word_check":
                     resultdict,total,count=check_short_words_validity(text, key)
                     result = f"总单词数：{total}\n有效单词数：{count}\n无效单词数：{total-count}\n检查结果：{resultdict}"
-                elif assist_type == "intelligent_assist":
-                    result = generate_assist_suggestions(text, key)
             print(f"Mode: {mode}, Text: {text}, Key: {key},result: {result}")
         except Exception as e:
             error = f"密钥格式错误：{str(e)}"

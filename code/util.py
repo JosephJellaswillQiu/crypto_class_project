@@ -318,7 +318,7 @@ def generate_assist_suggestions(text, key):
             if count == 1 and len(word) > 1:
                 matches = find_possible_words(w)
                 possible[w] = matches
-        return f"可能的单词替换建议：{possible}，建议参考频率分析结果和上下文选择。"
+        return f"可能的单词替换建议：{possible}\n 建议参考频率分析结果{freq}和上下文选择。"
                 
         
                 
