@@ -282,38 +282,43 @@ def generate_assist_suggestions(text, key):
         word_recommend = []
         for k ,frq in bi_freq.items():
             if frq > 2 * get_average_of_values(bi_freq):
-                bi_recommend.append((k, frq))
+                bi_recommend.append(k)
         for k ,frq in tri_freq.items():
             if frq > 2 * get_average_of_values(tri_freq):
                 tri_recommend.append((k, frq))
         for k, frq in word_freq.items():
             if frq >  get_average_of_values(word_freq):
-                word_recommend.append((k, frq))
+                word_recommend.append(k)
         for k,v in key.items():
             if v == 'e':
                 target = k
                 print(f"target:{target}")
                 break
         final = []
+        print("bi_recommend:", bi_recommend)
+        print("tri_recommend:", tri_recommend)
+        print("word_recommend:", word_recommend)
         for i in tri_recommend:
-            if i[0][2] == target and i[0][0:2]in bi_recommend and i in word_recommend \
+            print(i, i[0][2], target, i[0][0:2])
+            if i[0][2] == target and i[0][0:2]in bi_recommend and i[0] in word_recommend \
             and abs(freq[i[0][0]] - standard_letter_frequencies['t']) < 0.3 \
             and abs(freq[i[0][1]] - standard_letter_frequencies['h']) < 0.3:
                 final.append(i[0][0:2])
-        return f"th key可能是{final}中的，请检查是否有误。"
+        return f"th 可能是{final}中的，请检查是否有误。"
     else:
         decrypted_text = contrast_decrypt(text, key)
-        words = decrypted_text.strip('.,!?;:"()[]{}').split()
+        words = decrypted_text.split()
         possible = {}
         for w in words:
             count = 0
-            for char in w:
+            word = w.strip('.,!?;:"()[]{}')
+            for char in word:
                 if char == '_':
                     count += 1
-            if count <= 2:
+            if count == 1 and len(word) > 1:
                 matches = find_possible_words(w)
                 possible[w] = matches
-        return f"可能的单词替换建议：{possible}，请检查是否有误。"
+        return f"可能的单词替换建议：{possible}，建议参考频率分析结果和上下文选择。"
                 
         
                 
