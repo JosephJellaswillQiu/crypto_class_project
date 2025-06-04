@@ -1,6 +1,24 @@
 import nltk
-
+import math
+import re
 nltk.data.path.append('./my_nltk_data')
+from nltk.corpus import words
+# 提取英文单词词典并转换为小写集合，提高查询效率
+english_words = set(word.lower() for word in words.words())
+
+def find_possible_words(partial_word):
+    """
+    根据部分单词（如 'w_rd'）查找可能的完整单词
+    :param partial_word: 包含下划线的部分单词（如 'w_rd'）
+    :return: 匹配的单词列表
+    """ 
+    pattern = partial_word.replace("_", ".")  # 将下划线替换为正则表达式中的任意字符 "."
+    
+    # 使用正则表达式匹配单词
+    regex = re.compile(f"^{pattern}$")  # 构造正则表达式
+    matches = [word for word in english_words if regex.match(word)]
+    
+    return matches
 
 class FrequencyAnalyzer:
     def __init__(self, text):
@@ -159,10 +177,15 @@ class suggestion_generator:
         }
         return tier
     
+standard_letter_frequencies = {
+    'a': 0.08167, 'b': 0.01492, 'c': 0.02782, 'd': 0.04253, 'e': 0.12702,
+    'f': 0.02228, 'g': 0.02015, 'h': 0.06094, 'i': 0.06996, 'j': 0.00153,
+    'k': 0.00772, 'l': 0.04025, 'm': 0.02406, 'n': 0.06749, 'o': 0.07507,
+    'p': 0.01929, 'q': 0.00095, 'r': 0.05987, 's': 0.06327, 't': 0.09056,
+    'u': 0.02758, 'v': 0.00978, 'w': 0.02360, 'x': 0.00150, 'y': 0.01974, 'z': 0.00074
+}
 
-from nltk.corpus import words
-# 提取英文单词词典并转换为小写集合，提高查询效率
-english_words = set(word.lower() for word in words.words())
+
 def check_short_words_validity(cipher_text, key):
     """
     检查密文中的短词（1-3字母）在解密后是否为有效英文单词
@@ -176,13 +199,15 @@ def check_short_words_validity(cipher_text, key):
     result = []
     for i, word in enumerate(words_list):
         word = word.strip('.,!?;:"()[]{}')
-        if 1 <= len(word) <= 4:
+        if 1 <= len(word) <= 10:
             total += 1
             is_valid = word.lower() in english_words
             count += is_valid
             if not is_valid:
                 result.append((word, i))
     return result, total, count
+
+
 
 def suggest_vowels(text,key):
     generator = suggestion_generator()
@@ -230,10 +255,79 @@ def word_frequency(text):
     w_freq = analyzer.word_frequency()
     return w_freq
 
+def get_average_of_values(my_dict):
+    """
+    计算字典中所有值的平均值
+    :param my_dict: 字典
+    :return: 平均值
+    """
+    if not my_dict:  # 检查字典是否为空
+        return 0
+    total = sum(my_dict.values())  # 计算值的总和
+    count = len(my_dict)  # 计算值的数量
+    return total / count
+
 def generate_assist_suggestions(text, key):
-    return "haven't implemented yet"
+    freq = letter_frequency(text)
+    if 'e' not in key.values():
+        max_key = max(freq, key=freq.get)
+        max_value = freq[max_key]
+        return f" 建议在密钥中添加字母 'e'，因为它是英语中最常用的字母,频率：{standard_letter_frequencies['e']:.3f},目前频率最大的是{max_key},对应频率{max_value:.3f} 。"
+    elif 't' and 'h' not in key.values():
+        bi_freq = bigram_frequency(text)
+        tri_freq = trigram_frequency(text)
+        word_freq = word_frequency(text)
+        bi_recommend = []
+        tri_recommend = []
+        word_recommend = []
+        for k ,frq in bi_freq.items():
+            if frq > 2 * get_average_of_values(bi_freq):
+                bi_recommend.append(k)
+        for k ,frq in tri_freq.items():
+            if frq > 2 * get_average_of_values(tri_freq):
+                tri_recommend.append((k, frq))
+        for k, frq in word_freq.items():
+            if frq >  get_average_of_values(word_freq):
+                word_recommend.append(k)
+        for k,v in key.items():
+            if v == 'e':
+                target = k
+                print(f"target:{target}")
+                break
+        final = []
+        print("bi_recommend:", bi_recommend)
+        print("tri_recommend:", tri_recommend)
+        print("word_recommend:", word_recommend)
+        for i in tri_recommend:
+            if i[0][2] == target and i[0][0:2]in bi_recommend and i in word_recommend \
+            and abs(freq[i[0][0]] - standard_letter_frequencies['t']) < 0.3 \
+            and abs(freq[i[0][1]] - standard_letter_frequencies['h']) < 0.3:
+                final.append(i[0][0:2])
+        return f"th key可能是{final}中的，请检查是否有误。"
+    else:
+        decrypted_text = contrast_decrypt(text, key)
+        words = decrypted_text.strip('.,!?;:"()[]{}').split()
+        possible = {}
+        for w in words:
+            count = 0
+            for char in w:
+                if char == '_':
+                    count += 1
+            if count <= 2:
+                matches = find_possible_words(w)
+                possible[w] = matches
+        return f"可能的单词替换建议：{possible}，请检查是否有误。"
+                
+        
+                
+                
+        
+        
+    
 
     
+
+
 
 
     
