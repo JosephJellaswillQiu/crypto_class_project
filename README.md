@@ -9,3 +9,5 @@
 1. 安装需要的包：pip install -r requirements.txt
 2. 运行：python code/app.py
 3. 打开链接
+4. 输入明文/密文，选择功能，点击提交
+5. 查看结果
