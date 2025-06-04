@@ -12,12 +12,12 @@ def find_possible_words(partial_word):
     :param partial_word: 包含下划线的部分单词（如 'w_rd'）
     :return: 匹配的单词列表
     """ 
-    pattern = partial_word.replace("_", ".")  # 将下划线替换为正则表达式中的任意字符 "."
-    
+    pattern = partial_word.strip('.,!?;:"()[]{}').replace("_", ".")  # 将下划线替换为正则表达式中的任意字符 "."
+    print(pattern)
     # 使用正则表达式匹配单词
     regex = re.compile(f"^{pattern}$")  # 构造正则表达式
     matches = [word for word in english_words if regex.match(word)]
-    
+    print(matches)
     return matches
 
 class FrequencyAnalyzer:
@@ -308,17 +308,22 @@ def generate_assist_suggestions(text, key):
     else:
         decrypted_text = contrast_decrypt(text, key)
         words = decrypted_text.split()
+        contrasts = text.split()
         possible = {}
         for w in words:
             count = 0
             word = w.strip('.,!?;:"()[]{}')
+            contrast = contrasts[words.index(w)].strip('.,!?;:"()[]{}')
             for char in word:
                 if char == '_':
                     count += 1
-            if count == 1 and len(word) > 1:
+            if (count == 1 or count == 2 ) and len(word) > 1 and (len(word) >=2*count +1 or (len(word)<=2 and count == 1)):
                 matches = find_possible_words(w)
-                possible[w] = matches
-        return f"可能的单词替换建议：{possible}\n 建议参考频率分析结果{freq}和上下文选择。"
+                possible[(words.index(w)+1,contrast,w)] = matches
+        if possible:
+            return f"可能的单词替换建议：{possible}\n 建议参考频率分析结果{freq}和上下文选择。"
+        else:
+            return "没有找到可能的单词替换建议。"
                 
         
                 
