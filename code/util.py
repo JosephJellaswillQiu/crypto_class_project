@@ -282,22 +282,19 @@ def generate_assist_suggestions(text, key):
         word_recommend = []
         for k ,frq in bi_freq.items():
             if frq > 2 * get_average_of_values(bi_freq):
-                bi_recommend.append(k)
+                bi_recommend.append((k, frq))
         for k ,frq in tri_freq.items():
             if frq > 2 * get_average_of_values(tri_freq):
                 tri_recommend.append((k, frq))
         for k, frq in word_freq.items():
             if frq >  get_average_of_values(word_freq):
-                word_recommend.append(k)
+                word_recommend.append((k, frq))
         for k,v in key.items():
             if v == 'e':
                 target = k
                 print(f"target:{target}")
                 break
         final = []
-        print("bi_recommend:", bi_recommend)
-        print("tri_recommend:", tri_recommend)
-        print("word_recommend:", word_recommend)
         for i in tri_recommend:
             if i[0][2] == target and i[0][0:2]in bi_recommend and i in word_recommend \
             and abs(freq[i[0][0]] - standard_letter_frequencies['t']) < 0.3 \
