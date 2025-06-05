@@ -1,0 +1,27 @@
+\contentsline {section}{\numberline {1}研究背景与动机}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}密码分析的范式转变}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}核心研究问题}{2}{subsection.1.2}%
+\contentsline {section}{\numberline {2}理论框架与核心概念}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}密码分析模型的形式化定义}{2}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}样本驱动攻击方（Sample-based Adversaries）}{2}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}梯度驱动攻击方（Gradient-based Adversaries）}{3}{subsubsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.2}统计模拟理论}{3}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}\(\epsilon \)-模拟与黑盒\(\epsilon \)-模拟}{3}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}统计距离（Statistical Distance）}{3}{subsubsection.2.2.2}%
+\contentsline {section}{\numberline {3}主要研究贡献}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}统一模拟框架}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}梯度驱动方法的普适模拟能力}{4}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}基于DFS的完美模拟}{4}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}全并行梯度查询}{4}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}基于梯度下降（GD）的模拟}{4}{subsubsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.3}扩展与实际场景适配}{5}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}多比特标签与小批量数据}{5}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}理论突破}{5}{subsubsection.3.3.2}%
+\contentsline {section}{\numberline {4}实验验证与结果分析}{5}{section.4}%
+\contentsline {subsection}{\numberline {4.1}实验设计}{5}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}实验结果与分析}{6}{subsection.4.2}%
+\contentsline {section}{\numberline {5}思考与启示}{6}{section.5}%
+\contentsline {subsection}{\numberline {5.1}对ML密码分析的重新认知}{6}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}传统与ML方法的协同路径}{6}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}挑战与未来方向}{7}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}对跨学科研究的启示}{7}{subsection.5.4}%
